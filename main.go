@@ -122,6 +122,16 @@ func (h *Handlers) updateAnimal(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (h *Handlers) deleteById(w http.ResponseWriter, r *http.Request) {
+	captura := json.NewDecoder(r.Body)
+	var formData Animales
+	captura.Decode(&formData)
+	_, err := h.db.NamedExec(`DELETE FROM animales WHERE id=:id`, formData)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
 func initDb() *sqlx.DB {
 	db, err := sqlx.Connect("postgres", "user=postgres dbname=ANIMALES2 password=WhySoSerious sslmode=disable")
 	if err != nil {
@@ -143,6 +153,8 @@ func main() {
 	router.HandleFunc("/animales", handlers.getAllAnimals).Methods("GET")
 	//muestra animales por id
 	router.HandleFunc("/animales/{id}", handlers.getById).Methods("GET")
+	//Elimina un animal por ID
+	router.HandleFunc("/animales", handlers.deleteById).Methods("DELETE")
 	//Crea animales
 	router.HandleFunc("/animales", handlers.createAnimal).Methods("POST")
 	// actualiza animales
