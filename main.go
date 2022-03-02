@@ -147,7 +147,7 @@ func main() {
 	router.HandleFunc("/animales", handlers.createAnimal).Methods("POST")
 	// actualiza animales
 	router.HandleFunc("/animales", handlers.updateAnimal).Methods("PUT")
-	fmt.Print("Running on PORT:3000")
+	fmt.Print("Running on PORT:3000\n")
 	err := http.ListenAndServe(":3000", router)
 	if err != nil {
 		panic("Error: " + err.Error())
