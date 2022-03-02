@@ -31,7 +31,8 @@ func NewHandlers(db *sqlx.DB) *Handlers {
 	}
 }
 
-func (h *Handlers) getAnimals(w http.ResponseWriter, r *http.Request) {
+//trae un sólo animal (id:3)
+func (h *Handlers) getAnimal(w http.ResponseWriter, r *http.Request) {
 	rows, err := h.db.Queryx("SELECT id, name FROM animales WHERE id=$1", 3)
 	if err != nil {
 		log.Print(err)
@@ -44,26 +45,18 @@ func (h *Handlers) getAnimals(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	json.NewEncoder(w).Encode(aux_animales)
-	// ---------------------------------------------------
-	//
-	// var auxAnimal Animales
-	// err := h.db.Get(&auxAnimal, "SELECT * FROM animales WHERE id=$1", 3)
-	// if err != nil {
-	// 	log.Default()
-	// }
-	// fmt.Fprintf(w, `%v`, auxAnimal)
-	// fmt.Printf("  %#v\n", auxAnimal)
-	// ---------------------------------------------------
-	//  FUNCIONA PARCIALMENTE
-	// var nombre string
-	// err := h.db.Get(&nombre, "SELECT name FROM animales WHERE id=$1", 2)
-	// if err != nil {
-	// 	log.Default()
-	// }
-	// fmt.Fprintf(w, `%v`, nombre)
-	// fmt.Printf("  %#v\n", nombre)
+	/* -----------------OTHER WAY--------------------
+	var auxAnimal Animales
+	err := h.db.Get(&auxAnimal, "SELECT * FROM animales WHERE id=$1", 3)
+	if err != nil {
+		log.Default()
+	}
+	fmt.Fprintf(w, `%v`, auxAnimal)
+	fmt.Printf("  %#v\n", auxAnimal)
+	 ---------------------------------------------------*/
 }
 
+//trae todos los animales
 func (h *Handlers) getAllAnimals(w http.ResponseWriter, r *http.Request) {
 	rows, err := h.db.Queryx("SELECT * FROM animales ORDER BY id ASC")
 	if err != nil {
@@ -81,6 +74,7 @@ func (h *Handlers) getAllAnimals(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(consults)
 }
 
+//trae un animal por id
 func (h *Handlers) getById(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id_Params, err := strconv.Atoi(params["id"])
@@ -102,6 +96,7 @@ func (h *Handlers) getById(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(aux_animales)
 }
 
+// crea un animal por id
 func (h *Handlers) createAnimal(w http.ResponseWriter, r *http.Request) {
 	//capturo el request body
 	captura := json.NewDecoder(r.Body)
@@ -114,6 +109,8 @@ func (h *Handlers) createAnimal(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 	}
 }
+
+// actualiza un animal por id
 func (h *Handlers) updateAnimal(w http.ResponseWriter, r *http.Request) {
 	captura := json.NewDecoder(r.Body)
 	var formData Animales
@@ -141,7 +138,7 @@ func main() {
 	router := mux.NewRouter()
 
 	//muestra un animales {id:3}
-	router.HandleFunc("/", handlers.getAnimals).Methods("GET")
+	router.HandleFunc("/", handlers.getAnimal).Methods("GET")
 	//muestra todos los animales
 	router.HandleFunc("/animales", handlers.getAllAnimals).Methods("GET")
 	//muestra animales por id
