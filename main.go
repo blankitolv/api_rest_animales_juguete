@@ -148,19 +148,19 @@ func main() {
 	router := mux.NewRouter()
 
 	//muestra un animales {id:3}
-	router.HandleFunc("/", handlers.getAnimal).Methods("GET")
+	router.HandleFunc("/api", handlers.getAnimal).Methods("GET")
 	//muestra todos los animales
-	router.HandleFunc("/animales", handlers.getAllAnimals).Methods("GET")
+	router.HandleFunc("/api/animales", handlers.getAllAnimals).Methods("GET")
 	//muestra animales por id
-	router.HandleFunc("/animales/{id}", handlers.getById).Methods("GET")
+	router.HandleFunc("/api/animales/{id}", handlers.getById).Methods("GET")
 	//Elimina un animal por ID
-	router.HandleFunc("/animales", handlers.deleteById).Methods("DELETE")
+	router.HandleFunc("/api/animales", handlers.deleteById).Methods("DELETE")
 	//Crea animales
-	router.HandleFunc("/animales", handlers.createAnimal).Methods("POST")
+	router.HandleFunc("/api/animales", handlers.createAnimal).Methods("POST")
 	// actualiza animales
-	router.HandleFunc("/animales", handlers.updateAnimal).Methods("PUT")
-	fmt.Print("Running on PORT:3000\n")
-	err := http.ListenAndServe(":3000", router)
+	router.HandleFunc("/api/animales", handlers.updateAnimal).Methods("PUT")
+	fmt.Print("Running on PORT:9041\n")
+	err := http.ListenAndServe(":9041", router)
 	if err != nil {
 		panic("Error: " + err.Error())
 	}
