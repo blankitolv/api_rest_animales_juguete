@@ -25,7 +25,7 @@ export default {
 methods:{
    async getAnimals(){
       
-      await axios.get('https://localhost:9041/api/animales')
+      await axios.get('/api/animales')
       .then(data => console.log(data))
       .catch(e=> console.log(e))
    }
